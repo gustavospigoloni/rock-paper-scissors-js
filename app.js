@@ -11,8 +11,17 @@ function computerPlay () {
         case 2:
             return "scissors";
         default:
-            return "Error";
+            //never gets here because the function getRandomInt can only return 0, 1 or 2
     }
+}
+
+function isPlayerSelectionNewGameValid (playerSelection) {
+    if (/^[a-zA-Z]+$/.test(playerSelection) && playerSelection != null && playerSelection != undefined) {
+        if (playerSelection === "yes" || playerSelection === "no") {
+            return true;
+        }
+    }
+    return false;
 }
 
 function isPlayerSelectionValid (playerSelection) {
@@ -35,7 +44,7 @@ function playerPlay () {
 }
 
 function playRound (playerSelection, computerSelection) {
-    //0 tie / 1 player win / 2 computer win
+    //  0 is a tie / 1 player wins / 2 computer wins
     if (playerSelection === computerSelection) return 0;
 
     if (playerSelection === "rock") {
@@ -60,6 +69,7 @@ function playRound (playerSelection, computerSelection) {
 }
 
 function game () {
+    console.clear();
     let playerWins = 0,
     computerWins =  0,
     ties = 0,
@@ -90,5 +100,22 @@ function game () {
     }
 }
 
-//calling the function so the game starts when page is loaded/reloaded
+//calling the function to start a game as soon as the page is loaded
 game();
+
+//after the first game is finished, option to play again
+let newGame = true,
+validNewGameSelection;
+while (newGame) {
+    let playerWantsNewGame = prompt("Do you wanna play another match? Yes or No").toLowerCase();
+    validNewGameSelection = isPlayerSelectionNewGameValid(playerWantsNewGame);
+    while (!validNewGameSelection) {
+        playerWantsNewGame = prompt("Hey, no numbers, symbols or spaces! Do you wanna play another match? Yes or No").toLowerCase();
+        validNewGameSelection = isPlayerSelectionNewGameValid(playerWantsNewGame);
+    }
+    if (playerWantsNewGame === "yes") {
+        game();
+    } else {
+        newGame = false;
+    }
+}
