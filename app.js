@@ -16,7 +16,7 @@ function computerPlay () {
 }
 
 function isPlayerSelectionValid (playerSelection) {
-    if (!/[^a-zA-Z]/.test(playerSelection)) {
+    if (/^[a-zA-Z]+$/.test(playerSelection) && playerSelection != null && playerSelection != undefined) {
         if (playerSelection === "rock" || playerSelection === "paper" || playerSelection === "scissors") {
             return true;
         }
@@ -28,7 +28,7 @@ function playerPlay () {
     let selection = prompt("Rock, paper or scissors?").toLowerCase();
     let validPlay = isPlayerSelectionValid(selection);
     while (!validPlay) {
-        selection = prompt("Hey, no numbers or symbols! Just rock, paper or scissors?").toLowerCase();
+        selection = prompt("Hey, no numbers, symbols or spaces! Just rock, paper or scissors?").toLowerCase();
         validPlay = isPlayerSelectionValid(selection);
     }
     return selection;
