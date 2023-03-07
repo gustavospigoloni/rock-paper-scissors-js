@@ -1,0 +1,1 @@
+Rock, paper and scissors game made with only JavaScript.
