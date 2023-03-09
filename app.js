@@ -105,9 +105,10 @@ game();
 
 //after the first game is finished, option to play again
 let newGame = true,
-validNewGameSelection;
+validNewGameSelection,
+playerWantsNewGame;
 while (newGame) {
-    let playerWantsNewGame = prompt("Do you wanna play another match? Yes or No").toLowerCase();
+    playerWantsNewGame = prompt("Do you wanna play another match? Yes or No").toLowerCase();
     validNewGameSelection = isPlayerSelectionNewGameValid(playerWantsNewGame);
     while (!validNewGameSelection) {
         playerWantsNewGame = prompt("Hey, no numbers, symbols or spaces! Do you wanna play another match? Yes or No").toLowerCase();
