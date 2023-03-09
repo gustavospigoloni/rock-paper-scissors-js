@@ -80,10 +80,10 @@ function game () {
         playerSelection = playerPlay();
         computerSelection = computerPlay();
         roundWinner = playRound (playerSelection, computerSelection);
-        if (roundWinner === 1){
+        if (roundWinner === 2){
             console.log(`You lose! ${capitalizeWord(computerSelection)} beats ${capitalizeWord(playerSelection)}`);
             computerWins++;
-        } else if (roundWinner === 2) {
+        } else if (roundWinner === 1) {
             console.log(`You win! ${capitalizeWord(playerSelection)} beats ${capitalizeWord(computerSelection)}`);
             playerWins++;
         } else {
