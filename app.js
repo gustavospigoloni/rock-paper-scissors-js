@@ -1,114 +1,164 @@
-const getRandomInt = () => Math.floor(Math.random() * 3);
-const capitalizeWord = (word) => word[0].toUpperCase() + word.slice(1);
+// Global variables
+let playerScore = 0;
+let computerScore = 0;
+let ties = 0;
+let rounds = 0;
 
-function computerPlay () {
-    let computerSelection = getRandomInt();
-    switch (computerSelection) {
-        case 0:
-            return "rock";
-        case 1:
-            return "paper";
-        case 2:
-            return "scissors";
-        default:
-            //never gets here because the function getRandomInt can only return 0, 1 or 2
-            return;
-    }
+// Randomizes computer selection
+function computerPlay() {
+  const gameMoves = ["rock", "paper", "scissors"];
+  const randomSelection =
+    gameMoves[Math.floor(Math.random() * gameMoves.length)];
+  return randomSelection;
 }
 
-function isPlayerSelectionValid (playerSelection) {
-    if (/^[a-zA-Z]+$/.test(playerSelection) && playerSelection != null && playerSelection != undefined) {
-        if (playerSelection === "rock" || playerSelection === "paper" || playerSelection === "scissors") {
-            return true;
-        }
+// Validate player input if using correct characters
+function validatePlayerInput(playerSelection) {
+  const regex = /^[a-zA-Z]+$/;
+  const testRegex = regex.test(playerSelection);
+
+  if (testRegex && playerSelection != null && playerSelection != undefined) {
+    if (
+      playerSelection === "rock" ||
+      playerSelection === "paper" ||
+      playerSelection === "scissors"
+    ) {
+      return true;
+    } else if (rounds === 5) {
+      if (playerSelection === "yes") {
+        return true;
+      }
+      return false;
     }
-    return false;
+  }
+  return false;
 }
 
-function playerPlay () {
-    let selection = prompt("Rock, paper or scissors?");
-    if (selection === null) throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
-    let validPlay = isPlayerSelectionValid(selection.toLocaleLowerCase());
-    while (!validPlay) {
-        selection = prompt("Hey, no numbers, symbols or spaces! Just rock, paper or scissors?");
-        if (selection === null) throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
-        validPlay = isPlayerSelectionValid(selection.toLocaleLowerCase());
-    }
-    return selection;
+// Prompt window input for player, also runs validation check on input.
+function playerPlay() {
+  let playerInput = prompt(
+    "Let's play a game! Please choose rock, paper, or scissors!"
+  ).toLowerCase();
+  let validationCheck = validatePlayerInput(playerInput);
+
+  if (playerInput === null)
+    throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
+
+  while (!validationCheck) {
+    playerInput = prompt(
+      "Invalid entry, please don't use any special characters, symbols, or numbers. Try again please."
+    ).toLowerCase();
+    validationCheck = validatePlayerInput(playerInput);
+  }
+  return playerInput;
 }
 
-function playRound (playerSelection, computerSelection) {
-    //  0 is a tie / 1 player wins / 2 computer wins
-    if (playerSelection === computerSelection) return 0;
+// Simple round and score display
+function numberOfRounds() {
+  return console.log(
+    `Round: ${rounds},
+    Player Score: ${playerScore},
+    Computer Score: ${computerScore},
+    Ties: ${ties},`
+  );
+}
 
-    if (playerSelection === "rock") {
-        if (computerSelection ==="paper") {
-            return 2;
-        } else {
-            return 1;
-        }
-    } else if (playerSelection === "paper") {
-        if (computerSelection ==="scissors") {
-            return 2;
-        } else {
-            return 1;
-        }
+//logic for each round played
+function playRound(playerSelection, computerSelection) {
+  rounds += 1;
+  if (playerSelection === computerSelection) {
+    ties += 1;
+    console.log(`${playerSelection} vs ${computerSelection}, it's a tie!`);
+    return numberOfRounds();
+  } else if (playerSelection === "rock" && computerSelection === "scissors") {
+    playerScore += 1;
+    console.log("Player wins! Rock breaks scissors! You're rocking it!");
+    return numberOfRounds();
+  } else if (playerSelection === "scissors" && computerSelection === "paper") {
+    playerScore += 1;
+    console.log("Player wins! Scissors cut paper!");
+    return numberOfRounds();
+  } else if (playerSelection === "paper" && computerSelection === "rock") {
+    playerScore += 1;
+    console.log("Player wins! Paper covers rock!");
+    return numberOfRounds();
+  } else {
+    computerScore += 1;
+    console.log(
+      `Computer wins! ${computerSelection} beats ${playerSelection}!`
+    );
+    return numberOfRounds();
+  }
+}
+
+function game() {
+  // Allows only 5 rounds to be played.
+  for (let i = 0; i < 5; i++) {
+    const player = playerPlay();
+    const computer = computerPlay();
+    playRound(player, computer);
+  }
+
+  // function playAgainCall() {
+  //   let playAgainInput = prompt(
+  //     "Do you want to play again? Please type 'yes' if you do!"
+  //   ).toLowerCase();
+  //   return playAgainInput;
+  // }
+
+  function resetGame(playAgainInput) {
+    if (playAgainInput === "yes") {
+      ties = 0;
+      playerScore = 0;
+      computerScore = 0;
+      rounds = 0;
+      console.clear();
+      return game();
     } else {
-        if (computerSelection ==="rock") {
-            return 2;
-        } else {
-            return 1;
-        }
+      return console.log("Thank you for playing!");
     }
-}
+  }
 
-function game () {
-    console.clear();
-    let playerWins = 0,
-    computerWins =  0,
-    ties = 0,
-    playerSelection,
-    computerSelection,
-    roundWinner;
-    for (let i = 0; i < 5; i++) {
-        playerSelection = playerPlay();
-        computerSelection = computerPlay();
-        roundWinner = playRound (playerSelection, computerSelection);
-        if (roundWinner === 2){
-            console.log(`You lose! ${capitalizeWord(computerSelection)} beats ${capitalizeWord(playerSelection)}`);
-            computerWins++;
-        } else if (roundWinner === 1) {
-            console.log(`You win! ${capitalizeWord(playerSelection)} beats ${capitalizeWord(computerSelection)}`);
-            playerWins++;
-        } else {
-            console.log(`It's a tie! ${capitalizeWord(playerSelection)} x ${capitalizeWord(computerSelection)}`);
-            ties++;
-        }
-    }
-    if (playerWins > computerWins) {
-        console.log(`You won the BO5! ${playerWins} player wins x ${computerWins} computer wins and ${ties} ties`);
-    } else if (computerWins > playerWins) {
-        console.log(`You lost the BO5! HAHA! ${computerWins} computer wins x ${playerWins} player wins and ${ties} ties`);
+  //Displays winner of game
+  if (ties + computerScore + playerScore === 5) {
+    if (ties === 5) {
+      console.log(
+        `You tied with the computer ${playerScore} vs. ${computerScore}. So close!`
+      );
+    } else if (playerScore > computerScore && ties) {
+      console.log(
+        `Congratulations! YOU WON!!! with ${playerScore} out of 5 rounds!`
+      );
     } else {
-        console.log(`It's a tie! ${ties} ties, ${computerWins} computer wins and ${playerWins} player wins`);
+      console.log(
+        `You lose! Computer wins with ${computerScore} out of 5 rounds. Better luck next time!`
+      );
     }
+  }
 }
 
-let consoleOpen = window.confirm("If your browser console is not open, please press Ctrl + Shift + J (or Cmd + Shift + J on a Mac) "
-+ "to open it and the reload the page. You need the console to see the game results. If your console is open click 'OK' for the game "
-+ "to start or click 'Cancel' for you to open the console and then reload the page.");
+let consoleOpen = window.confirm(
+  "If your browser console is not open, please press Ctrl + Shift + J (or Cmd + Shift + J on a Mac) " +
+    "to open it and then reload the page. You need the console to see the game results. If your console is open click 'OK' for the game " +
+    "to start or click 'Cancel' for you to open the console and then reload the page."
+);
 
 if (consoleOpen) {
-    game();
-    let playerWantNewGame = true;
+  game();
+  let playerStartsNewGame = true;
 
-    while(playerWantNewGame) {
-        playerWantNewGame = window.confirm("Do you wanna play another bo5 match of rock, paper or scissors? Click 'OK' to begin the game or 'Cancel' to exit.");
-        if (playerWantNewGame) {
-            game();
-        } else {
-            console.log("You clicked on Cancel so the game stopped. Reload the page if you want to play.");
-            playerWantNewGame = false;
-        }
+  while (playerStartsNewGame) {
+    playerStartsNewGame = window.confirm(
+      "Do you wanna play another match of rock, paper or scissors? Click 'OK' to begin the game or 'Cancel' to exit."
+    );
+    if (playerStartsNewGame) {
+      console.clear();
+      game();
+    } else {
+      console.log(
+        "You clicked on Cancel so the game stopped. Reload the page if you want to play."
+      );
+      playerStartsNewGame = false;
     }
+  }
 }
