@@ -12,16 +12,8 @@ function computerPlay () {
             return "scissors";
         default:
             //never gets here because the function getRandomInt can only return 0, 1 or 2
+            return;
     }
-}
-
-function isPlayerSelectionNewGameValid (playerSelection) {
-    if (/^[a-zA-Z]+$/.test(playerSelection) && playerSelection != null && playerSelection != undefined) {
-        if (playerSelection === "yes" || playerSelection === "no") {
-            return true;
-        }
-    }
-    return false;
 }
 
 function isPlayerSelectionValid (playerSelection) {
@@ -34,11 +26,13 @@ function isPlayerSelectionValid (playerSelection) {
 }
 
 function playerPlay () {
-    let selection = prompt("Rock, paper or scissors?").toLowerCase();
-    let validPlay = isPlayerSelectionValid(selection);
+    let selection = prompt("Rock, paper or scissors?");
+    if (selection === null) throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
+    let validPlay = isPlayerSelectionValid(selection.toLocaleLowerCase());
     while (!validPlay) {
-        selection = prompt("Hey, no numbers, symbols or spaces! Just rock, paper or scissors?").toLowerCase();
-        validPlay = isPlayerSelectionValid(selection);
+        selection = prompt("Hey, no numbers, symbols or spaces! Just rock, paper or scissors?");
+        if (selection === null) throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
+        validPlay = isPlayerSelectionValid(selection.toLocaleLowerCase());
     }
     return selection;
 }
@@ -100,23 +94,21 @@ function game () {
     }
 }
 
-//calling the function to start a game as soon as the page is loaded
-game();
+let consoleOpen = window.confirm("If your browser console is not open, please press Ctrl + Shift + J (or Cmd + Shift + J on a Mac) "
++ "to open it and the reload the page. You need the console to see the game results. If your console is open click 'OK' for the game "
++ "to start or click 'Cancel' for you to open the console and then reload the page.");
 
-//after the first game is finished, option to play again
-let newGame = true,
-validNewGameSelection,
-playerWantsNewGame;
-while (newGame) {
-    playerWantsNewGame = prompt("Do you wanna play another match? Yes or No").toLowerCase();
-    validNewGameSelection = isPlayerSelectionNewGameValid(playerWantsNewGame);
-    while (!validNewGameSelection) {
-        playerWantsNewGame = prompt("Hey, no numbers, symbols or spaces! Do you wanna play another match? Yes or No").toLowerCase();
-        validNewGameSelection = isPlayerSelectionNewGameValid(playerWantsNewGame);
-    }
-    if (playerWantsNewGame === "yes") {
-        game();
-    } else {
-        newGame = false;
+if (consoleOpen) {
+    game();
+    let playerWantNewGame = true;
+
+    while(playerWantNewGame) {
+        playerWantNewGame = window.confirm("Do you wanna play another bo5 match of rock, paper or scissors? Click 'OK' to begin the game or 'Cancel' to exit.");
+        if (playerWantNewGame) {
+            game();
+        } else {
+            console.log("You clicked on Cancel so the game stopped. Reload the page if you want to play.");
+            playerWantNewGame = false;
+        }
     }
 }
