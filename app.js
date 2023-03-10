@@ -1,11 +1,11 @@
-//function so words look pretty
-const capitalizeWord = (word) => word[0].toUpperCase() + word.slice(1);
-
 // Global variables
 let playerScore = 0;
 let computerScore = 0;
 let ties = 0;
 let rounds = 0;
+
+//function so words look pretty
+const capitalizeWord = (word) => word[0].toUpperCase() + word.slice(1);
 
 // Randomizes computer selection
 function computerPlay() {
@@ -42,20 +42,18 @@ function playerPlay() {
   let playerInput = prompt(
     "Let's play a game! Please choose rock, paper, or scissors!"
   );
-  if (playerInput === null){
+  if (playerInput === null) {
     throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
   }
   playerInput = playerInput.toLowerCase();
   let validationCheck = validatePlayerInput(playerInput);
 
-  
-
   while (!validationCheck) {
     playerInput = prompt(
       "Invalid entry, please don't use any special characters, symbols, or numbers. Try again please."
     );
-    if (playerInput === null){
-        throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
+    if (playerInput === null) {
+      throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
     }
     playerInput = playerInput.toLowerCase();
     validationCheck = validatePlayerInput(playerInput);
@@ -78,7 +76,11 @@ function playRound(playerSelection, computerSelection) {
   rounds += 1;
   if (playerSelection === computerSelection) {
     ties += 1;
-    console.log(`${capitalizeWord(playerSelection)} vs ${capitalizeWord(computerSelection)}, it's a tie!`);
+    console.log(
+      `${capitalizeWord(playerSelection)} vs ${capitalizeWord(
+        computerSelection
+      )}, it's a tie!`
+    );
     return numberOfRounds();
   } else if (playerSelection === "rock" && computerSelection === "scissors") {
     playerScore += 1;
@@ -95,7 +97,9 @@ function playRound(playerSelection, computerSelection) {
   } else {
     computerScore += 1;
     console.log(
-      `Computer wins! ${capitalizeWord(computerSelection)} beats ${capitalizeWord(playerSelection)}!`
+      `Computer wins! ${capitalizeWord(
+        computerSelection
+      )} beats ${capitalizeWord(playerSelection)}!`
     );
     return numberOfRounds();
   }
@@ -142,6 +146,10 @@ if (consoleOpen) {
       "Do you wanna play another match of rock, paper or scissors? Click 'OK' to begin the game or 'Cancel' to exit."
     );
     if (playerStartsNewGame) {
+      rounds = 0;
+      playerScore = 0;
+      computerScore = 0;
+      ties = 0;
       console.clear();
       game();
     } else {
