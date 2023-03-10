@@ -1,3 +1,6 @@
+//function so words look pretty
+const capitalizeWord = (word) => word[0].toUpperCase() + word.slice(1);
+
 // Global variables
 let playerScore = 0;
 let computerScore = 0;
@@ -38,16 +41,23 @@ function validatePlayerInput(playerSelection) {
 function playerPlay() {
   let playerInput = prompt(
     "Let's play a game! Please choose rock, paper, or scissors!"
-  ).toLowerCase();
+  );
+  if (playerInput === null){
+    throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
+  }
+  playerInput = playerInput.toLowerCase();
   let validationCheck = validatePlayerInput(playerInput);
 
-  if (playerInput === null)
-    throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
+  
 
   while (!validationCheck) {
     playerInput = prompt(
       "Invalid entry, please don't use any special characters, symbols, or numbers. Try again please."
-    ).toLowerCase();
+    );
+    if (playerInput === null){
+        throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
+    }
+    playerInput = playerInput.toLowerCase();
     validationCheck = validatePlayerInput(playerInput);
   }
   return playerInput;
@@ -68,24 +78,24 @@ function playRound(playerSelection, computerSelection) {
   rounds += 1;
   if (playerSelection === computerSelection) {
     ties += 1;
-    console.log(`${playerSelection} vs ${computerSelection}, it's a tie!`);
+    console.log(`${capitalizeWord(playerSelection)} vs ${capitalizeWord(computerSelection)}, it's a tie!`);
     return numberOfRounds();
   } else if (playerSelection === "rock" && computerSelection === "scissors") {
     playerScore += 1;
-    console.log("Player wins! Rock breaks scissors! You're rocking it!");
+    console.log("Player wins! Rock breaks Scissors! You're rocking it!");
     return numberOfRounds();
   } else if (playerSelection === "scissors" && computerSelection === "paper") {
     playerScore += 1;
-    console.log("Player wins! Scissors cut paper!");
+    console.log("Player wins! Scissors cut Paper!");
     return numberOfRounds();
   } else if (playerSelection === "paper" && computerSelection === "rock") {
     playerScore += 1;
-    console.log("Player wins! Paper covers rock!");
+    console.log("Player wins! Paper covers Rock!");
     return numberOfRounds();
   } else {
     computerScore += 1;
     console.log(
-      `Computer wins! ${computerSelection} beats ${playerSelection}!`
+      `Computer wins! ${capitalizeWord(computerSelection)} beats ${capitalizeWord(playerSelection)}!`
     );
     return numberOfRounds();
   }
@@ -97,26 +107,6 @@ function game() {
     const player = playerPlay();
     const computer = computerPlay();
     playRound(player, computer);
-  }
-
-  // function playAgainCall() {
-  //   let playAgainInput = prompt(
-  //     "Do you want to play again? Please type 'yes' if you do!"
-  //   ).toLowerCase();
-  //   return playAgainInput;
-  // }
-
-  function resetGame(playAgainInput) {
-    if (playAgainInput === "yes") {
-      ties = 0;
-      playerScore = 0;
-      computerScore = 0;
-      rounds = 0;
-      console.clear();
-      return game();
-    } else {
-      return console.log("Thank you for playing!");
-    }
   }
 
   //Displays winner of game
@@ -156,7 +146,7 @@ if (consoleOpen) {
       game();
     } else {
       console.log(
-        "You clicked on Cancel so the game stopped. Reload the page if you want to play."
+        "Thank you for playing! Reload the page if you want to play again."
       );
       playerStartsNewGame = false;
     }
