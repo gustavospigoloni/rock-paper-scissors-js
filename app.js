@@ -45,7 +45,7 @@ function playerPlay() {
   if (playerInput === null) {
     throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
   }
-  playerInput = playerInput.toLowerCase();
+  playerInput = playerInput.toLowerCase().trim();
   let validationCheck = validatePlayerInput(playerInput);
 
   while (!validationCheck) {
@@ -55,7 +55,7 @@ function playerPlay() {
     if (playerInput === null) {
       throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
     }
-    playerInput = playerInput.toLowerCase();
+    playerInput = playerInput.toLowerCase().trim();
     validationCheck = validatePlayerInput(playerInput);
   }
   return playerInput;
