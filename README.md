@@ -18,9 +18,9 @@ minimum of HTML to connect the script to the webpage.
 ## Rules of the Game
 
     * The main idea is to choose either rock, paper, or scissors as your "weapon" against the computer each round.
-    ** Paper will always win agains Rock, but lose to Scissors.
-    ** Rock will always win against Scissors, but lose to Paper.
-    ** Scissors will always win against paper, but lose to Rock.
+        * Paper will always win agains Rock, but lose to Scissors.
+        * Rock will always win against Scissors, but lose to Paper.
+        * Scissors will always win against paper, but lose to Rock.
 
     A winner will be determined after 5 rounds have been played!
 
