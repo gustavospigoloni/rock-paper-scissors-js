@@ -3,13 +3,13 @@ let playerScore = 0;
 let computerScore = 0;
 let ties = 0;
 let rounds = 0;
+const gameMoves = ["rock", "paper", "scissors"];
 
 //function so words look pretty
 const capitalizeWord = (word) => word[0].toUpperCase() + word.slice(1);
 
 // Randomizes computer selection
 function computerPlay() {
-  const gameMoves = ["rock", "paper", "scissors"];
   const randomSelection =
     gameMoves[Math.floor(Math.random() * gameMoves.length)];
   return randomSelection;
@@ -21,20 +21,15 @@ function validatePlayerInput(playerSelection) {
   const testRegex = regex.test(playerSelection);
 
   if (testRegex && playerSelection != null && playerSelection != undefined) {
-    if (
-      playerSelection === "rock" ||
-      playerSelection === "paper" ||
-      playerSelection === "scissors"
-    ) {
+    if (gameMoves.includes(playerSelection)) {
       return true;
-    } else if (rounds === 5) {
-      if (playerSelection === "yes") {
-        return true;
-      }
-      return false;
     }
   }
   return false;
+}
+
+function cancelPrompt() {
+  throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
 }
 
 // Prompt window input for player, also runs validation check on input.
@@ -42,8 +37,9 @@ function playerPlay() {
   let playerInput = prompt(
     "Let's play a game! Please choose rock, paper, or scissors!"
   );
+
   if (playerInput === null) {
-    throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
+    return cancelPrompt();
   }
   playerInput = playerInput.toLowerCase().trim();
   let validationCheck = validatePlayerInput(playerInput);
@@ -53,7 +49,7 @@ function playerPlay() {
       "Invalid entry, please don't use any special characters, symbols, or numbers. Try again please."
     );
     if (playerInput === null) {
-      throw "You clicked on Cancel so the game stopped. Reload the page if you want to play again.";
+      return cancelPrompt();
     }
     playerInput = playerInput.toLowerCase().trim();
     validationCheck = validatePlayerInput(playerInput);
